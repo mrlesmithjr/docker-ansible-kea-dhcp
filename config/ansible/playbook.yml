@@ -19,6 +19,13 @@
         install_recommends: no
       with_items: '{{ kea_dhcp_debian_packages }}'
 
+    - name: Ensuring Folders Exist
+      file:
+        path: "{{ item }}"
+        state: "directory"
+      with_items:
+        - '/var/log/kea'
+
     - name: Configuring Kea
       template:
         src: "{{ item.src }}"
