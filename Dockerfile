@@ -11,7 +11,7 @@ RUN ansible-playbook -i "localhost," -c local /playbook.yml && \
     apt-get -y autoremove && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-VOLUME ["/etc/kea", "/var/lib/kea"]
+VOLUME [ "/etc/kea","/var/lib/kea" ]
 
 CMD ["kea-dhcp4", "-c", "/etc/kea/kea-dhcp4.conf"]
 
