@@ -24,7 +24,7 @@
         src: "{{ item.src }}"
         dest: "{{ item.dest }}"
       with_items:
-        - src: '/etc/kea-dhcp4.conf.j2'
+        - src: '/kea-dhcp4.conf.j2'
           dest: '/etc/kea/kea-dhcp4.conf'
 
     - name: Creating Symlink(s)
