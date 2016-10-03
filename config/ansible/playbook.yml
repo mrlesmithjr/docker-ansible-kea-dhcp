@@ -4,6 +4,7 @@
   connection: local
   vars:
     kea_dhcp_debian_packages:
+      - 'kea-admin'
       - 'kea-dhcp-ddns-server'
       - 'kea-dhcp4-server'
   tasks:
@@ -17,6 +18,14 @@
         state: "present"
         install_recommends: no
       with_items: '{{ kea_dhcp_debian_packages }}'
+
+    - name: Configuring Kea
+      template:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+      with_items:
+        - src: '/etc/kea-dhcp4.conf.j2'
+          dest: '/etc/kea/kea-dhcp4.conf'
 
     - name: Creating Symlink(s)
       file:
