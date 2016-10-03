@@ -1,0 +1,37 @@
+kea-dhcp:
+  image: mrlesmithjr/kea-dhcp
+  volumes:
+  - /etc/kea
+phpipam-db:
+  environment:
+    MYSQL_DATABASE: phpipam
+    MYSQL_PASSWORD: phpipam
+    MYSQL_ROOT_PASSWORD: phpipam
+    MYSQL_USER: phpipam
+  log_driver: none
+  labels:
+    io.rancher.container.pull_image: always
+  tty: true
+  image: mrlesmithjr/mysql
+  volumes:
+  - phpipam_db:/var/lib/mysql
+  stdin_open: true
+phpipam-web:
+  environment:
+    APACHE2_ENABLE_PHP: 'true'
+    PHPIPAM_DB_HOST: phpipam-db
+    PHPIPAM_DB_NAME: phpipam
+    PHPIPAM_DB_PASS: phpipam
+    PHPIPAM_DB_USER: phpipam
+  labels:
+    io.rancher.container.pull_image: always
+  tty: true
+  image: mrlesmithjr/phpipam:alpine
+  links:
+  - phpipam-db:phpipam-db
+  - 'pdns-db:'
+  stdin_open: true
+  ports:
+  - 8000:80
+  volumes_from:
+  - kea-dhcp

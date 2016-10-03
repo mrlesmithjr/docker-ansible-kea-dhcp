@@ -1,0 +1,28 @@
+---
+- hosts: localhost
+  become: true
+  connection: local
+  vars:
+    kea_dhcp_debian_packages:
+      - 'kea-dhcp-ddns-server'
+      - 'kea-dhcp4-server'
+  tasks:
+    - name: Updating Apt-Cache
+      apt:
+        update_cache: yes
+
+    - name: Installing Kea DHCP
+      apt:
+        name: "{{ item }}"
+        state: "present"
+        install_recommends: no
+      with_items: '{{ kea_dhcp_debian_packages }}'
+
+    - name: Creating Symlink(s)
+      file:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        state: "link"
+      with_items:
+        - src: '/etc/kea/kea-dhcp4.conf'
+          dest: '/etc/kea/kea.conf'
